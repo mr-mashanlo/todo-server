@@ -41,7 +41,7 @@ export class SessionController {
 
   refresh = async ( req, res, next ) => {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
       const token = this.tokenManager.generate( { id } );
       this.cookieManager.save( res, token );
       res.json( { id, token } );

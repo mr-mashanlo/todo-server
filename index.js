@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 
 import { errorMiddleware } from './middlewares/error-middleware.js';
 import { sessionRouter } from './routers/session-router.js';
+import { todoRouter } from './routers/todo-router.js';
 
 const app = express();
 app.use( cors( { credentials: true, origin: [ process.env.FRONT_URL || '' ] } ) );
@@ -14,6 +15,7 @@ app.use( cookieParser() );
 app.use( express.json() );
 
 app.use( '/session', sessionRouter );
+app.use( '/todo', todoRouter );
 
 app.use( errorMiddleware );
 
