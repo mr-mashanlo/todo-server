@@ -17,7 +17,8 @@ export class DatabaseController {
 
   getMany = async ( req, res, next ) => {
     try {
-      const document = await this.databaseService.getMany( { user: '' } );
+      const { id } = req.user;
+      const document = await this.databaseService.getMany( { user: id } );
       res.json( document );
     } catch ( error ) {
       next( error );

@@ -1,11 +1,25 @@
+import jwt from 'jsonwebtoken';
+
+import { ErrorManager } from './error-manager.js';
+
 export class SessionManager {
 
-  save = ( res, id ) => {
-    res.user = { id };
+  issue = ( res, payload ) => {
+    const token = jwt.sign( payload, process.env.SECRET_KEY || '', { expiresIn: '2h' } );
+    res.cookie( 'token', token, { maxAge: 7_200_000, httpOnly: true, sameSite: 'lax', secure: false } );
+    return { token, expired: Date.now() + 7_200_000 };
   };
 
-  remove = ( res ) => {
-    delete res.user;
+  revoke = ( res ) => {
+    return res.clearCookie( 'token' );
+  };
+
+  verify = ( token ) => {
+    try {
+      return jwt.verify( token, process.env.SECRET_KEY || '' );
+    } catch ( error ) {
+      throw new ErrorManager( { status: 400, issues: [ { name: 'token', message: error.message } ] } );
+    }
   };
 
 }

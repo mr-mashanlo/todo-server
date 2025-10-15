@@ -7,12 +7,11 @@ export class ValidatorManager {
   }
 
   parse = ( data ) => {
-    const result = this.schema.safeParse( data );
-    if ( !result.success ) {
-      const issues = result.error.issues.map( error => ( { name: error.path[0], message: error.message } ) );
-      throw new ErrorManager( { status: 400, issues } );
+    try {
+      return this.schema.parse( data );
+    } catch ( error ) {
+      throw new ErrorManager( { status: 400, issues: error.issues.map( error => ( { name: error.path[0], message: error.message } ) ) } );
     }
-    return result.data;
   };
 
 }

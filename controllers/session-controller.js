@@ -1,18 +1,16 @@
 export class SessionController {
 
-  constructor( sessionService, tokenManager, cookieManager ) {
+  constructor( sessionService, sessionManager ) {
     this.sessionService = sessionService;
-    this.tokenManager = tokenManager;
-    this.cookieManager = cookieManager;
+    this.sessionManager = sessionManager;
   };
 
   signIn = async ( req, res, next ) => {
     try {
       const { email, password } = req.body;
       const { _id: id } = await this.sessionService.signIn( { email, password } );
-      const token = this.tokenManager.generate( { id } );
-      this.cookieManager.save( res, token );
-      res.json( { id, token } );
+      const { token, expired } = this.sessionManager.issue( res, { id } );
+      res.json( { id, token, expired } );
     } catch ( error ) {
       next( error );
     }
@@ -22,9 +20,8 @@ export class SessionController {
     try {
       const { email, password } = req.body;
       const { _id: id } = await this.sessionService.signUp( { email, password } );
-      const token = this.tokenManager.generate( { id } );
-      this.cookieManager.save( res, token );
-      res.json( { id, token } );
+      const { token, expired } = this.sessionManager.issue( res, { id } );
+      res.json( { id, token, expired } );
     } catch ( error ) {
       next( error );
     }
@@ -32,7 +29,7 @@ export class SessionController {
 
   signOut = async ( req, res, next ) => {
     try {
-      this.cookieManager.remove( res );
+      this.sessionManager.revoke( res );
       res.json( { ok: true } );
     } catch ( error ) {
       next( error );
@@ -42,9 +39,8 @@ export class SessionController {
   refresh = async ( req, res, next ) => {
     try {
       const { id } = req.user;
-      const token = this.tokenManager.generate( { id } );
-      this.cookieManager.save( res, token );
-      res.json( { id, token } );
+      const { token, expired } = this.sessionManager.issue( res, { id } );
+      res.json( { id, token, expired } );
     } catch ( error ) {
       next( error );
     }
