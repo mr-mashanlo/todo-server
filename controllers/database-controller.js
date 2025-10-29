@@ -30,8 +30,8 @@ export class DatabaseController {
     try {
       const data = req.body;
       const { id } = req.user;
-      const { title } = this.validatorManager.parse( data );
-      const document = await this.databaseService.create( { title, created: Date.now(), updated: Date.now(), user: id } );
+      const validatedData = this.validatorManager.parse( data );
+      const document = await this.databaseService.create( { user: id, ...validatedData } );
       res.json( document );
     } catch ( error ) {
       next( error );
@@ -40,9 +40,10 @@ export class DatabaseController {
 
   update = async ( req, res, next ) => {
     try {
+      const { id } = req.params;
       const data = req.body;
-      const { title } = this.validatorManager.parse( data );
-      const document = await this.databaseService.create( { title, updated: Date.now() } );
+      const validatedData = this.validatorManager.parse( data );
+      const document = await this.databaseService.update( { _id: id }, validatedData );
       res.json( document );
     } catch ( error ) {
       next( error );
