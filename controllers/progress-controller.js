@@ -19,14 +19,13 @@ export class ProgressController extends DatabaseController {
     try {
       const data = req.body;
       const { id } = req.user;
-      const validatedData = this.validatorManager.parse( data );
-      const existsDocument = await this.databaseService.getOne( { user: id, date: validatedData.date } );
+      const existsDocument = await this.databaseService.getOne( { user: id, date: data.date } );
 
       if ( existsDocument ) {
-        const document = await this.databaseService.update( { user: id, date: validatedData.date }, validatedData );
+        const document = await this.databaseService.update( { user: id, date: data.date }, data );
         res.json( document );
       } else {
-        const document = await this.databaseService.create( { user: id, ...validatedData } );
+        const document = await this.databaseService.create( { user: id, ...data } );
         res.json( document );
       }
     } catch ( error ) {
