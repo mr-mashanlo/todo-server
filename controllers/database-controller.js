@@ -18,8 +18,8 @@ export class DatabaseController {
   getMany = async ( req, res, next ) => {
     try {
       const { id } = req.user;
-      const { limit = 10, page = 1 } = req.query;
-      const document = await this.databaseService.getMany( { user: id }, { limit: +limit, page: +page } );
+      const { limit = 10, page = 1, sort = 1 } = req.query;
+      const document = await this.databaseService.getMany( { user: id }, { limit: +limit, page: +page, sort: +sort } );
       res.json( document );
     } catch ( error ) {
       next( error );

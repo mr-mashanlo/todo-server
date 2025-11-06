@@ -9,9 +9,9 @@ export class DatabaseService {
   };
 
   getMany = async ( query, option ) => {
-    const { limit, page } = { limit: 10, page: 1, ...option };
+    const { limit, page, sort } = { limit: 10, page: 1, sort: 1, ...option };
     const skip = page > 0 ? ( page - 1 ) * limit : 0;
-    const data = await this.model.find( query ).sort( { _id: -1 } ).limit( limit ).skip( skip );
+    const data = await this.model.find( query ).sort( { _id: sort } ).limit( limit ).skip( skip );
     const total = await this.model.countDocuments( query );
     return { data, limit, total, page };
   };
