@@ -6,16 +6,33 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/",
-      "headers": {
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Origin": "*"
-      }
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://habits-client.vercel.app/"
+        }
+      ]
     }
   ]
 }
