@@ -7,7 +7,7 @@ export const HabitZod = z.object( {
 } );
 
 export const HabitSchema = new Schema( {
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
   title: { type: String, require: true, trim: true },
   days: [ { type: String } ]
 } );
