@@ -28,4 +28,8 @@ export class DatabaseService {
     return await this.model.deleteMany( query );
   };
 
+  count = async ( query ) => {
+    return await this.model.countDocuments( query );
+  };
+
 }
